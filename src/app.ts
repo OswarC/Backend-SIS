@@ -1,5 +1,4 @@
 import express, { Application } from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
@@ -17,7 +16,6 @@ class App {
     constructor() {
         this.app = express();
         this.setConfig();
-        this.setMongoConfig();
     };
 
     private setConfig() {
@@ -27,18 +25,6 @@ class App {
         this.app.use(cors());  
         this.app.use(express.json({ limit: "50mb" }));
         this.app.use(express.urlencoded({ limit: "50mb", extended: true }));
-    };
-
-    private setMongoConfig() {
-        mongoose.Promise = global.Promise;
-
-        mongoose.connect(process.env.MNG_URI!, {}, (err: any) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                console.log("Base de datos Conectada!");
-            }
-        });
     };
 
 };
