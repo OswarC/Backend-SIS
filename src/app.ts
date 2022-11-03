@@ -6,16 +6,20 @@ import morgan from "morgan";
 
 import { resolve } from "path";
 import { config } from "dotenv";
+import UserController from "./controllers/users.controller";
 
 
 config({ path: resolve(__dirname, "../.env") });
 
 class App {
     public app: Application;
+    public UsCont: UserController;
 
     constructor() {
         this.app = express();
         this.setConfig();
+        
+        this.UsCont = new UserController(this.app);
     };
 
     private setConfig() {
@@ -28,8 +32,5 @@ class App {
     };
 
 };
-
-
-
 
 export default new App().app
