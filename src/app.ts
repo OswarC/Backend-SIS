@@ -18,6 +18,7 @@ class App {
     constructor() {
         this.app = express();
         this.setConfig();
+        this.setSqlConfig();
         
         this.UsCont = new UserController(this.app);
     };
@@ -31,6 +32,29 @@ class App {
         this.app.use(express.urlencoded({ limit: "50mb", extended: true }));
     };
 
+    private setSqlConfig(){
+        const sql = require("mssql");
+        var config = {
+            user: process.env.DB_USER!,
+            password: process.env.DB_PASS!,
+            server: process.env.DB_SERVER!,
+            "options": {
+                "encrypt": true,
+                "enableArithAbort": true
+            }
+        };
+    
+        sql.connect(config, (err: Error | undefined) => {
+            if (err) {
+               console.log(err.message)
+            } else {
+                console.log("Conexion con Sql");
+            };
+        });
+    };
+
 };
+
+
 
 export default new App().app
