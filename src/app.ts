@@ -3,11 +3,11 @@ import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
 import morgan from "morgan";
+import sql from "mssql";
 
 import { resolve } from "path";
 import { config } from "dotenv";
 import UserController from "./controllers/users.controller";
-
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -24,7 +24,7 @@ class App {
     };
 
     private setConfig() {
-        this.app.use(morgan("dev"));
+        //this.app.use(morgan("tiny"));
         this.app.use(helmet());
         this.app.use(compression());
         this.app.use(cors());  
@@ -33,8 +33,9 @@ class App {
     };
 
     private setSqlConfig(){
-        const sql = require("mssql");
-        var config = {
+        
+        const config: sql.config = {
+            database: process.env.DB!,
             user: process.env.DB_USER!,
             password: process.env.DB_PASS!,
             server: process.env.DB_SERVER!,
@@ -54,7 +55,5 @@ class App {
     };
 
 };
-
-
 
 export default new App().app

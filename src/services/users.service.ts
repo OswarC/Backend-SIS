@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import pca, { REDIRECT_URI } from "../config";
+import SqlDriver from "../helpers/sql.helper";
+import { IUser } from "../models/users.model";
 
 class UserService{
 
@@ -22,9 +24,28 @@ class UserService{
         };
     
         pca.acquireTokenByCode(tokenRequest).then((response:any) => {
-            console.log("\nResponse: \n:", response);
+            const account:any = response.account;
+            const dn:string[] = account.username.split("edu");
+            
+            const ud: IUser = {
+                name: account.name,
+                email: account.username,
+                create_at: new Date(),
+                utype_id: (dn.length === 1)? 1 : 2
+            };
+
+            const sql: SqlDriver = new SqlDriver();
+
+            sql.input("name", ud.name);
+            sql.input("email", ud.email);
+            sql.input("create_at", new Date());
+            sql.input("utype_id", ud.utype_id);
+
+            sql.execute("InsertUser")
+
             res.cookie("tk","dasdwqrwgerr trew");
             res.redirect("http://localhost:3001");
+
         }).catch((error:any) => {
             console.log(error);
             res.status(500).send(error);

@@ -9,7 +9,6 @@
   },
   "author": "Oswar Cruz <oswar.cruzn499@gmail.com>",
   "license": "MIT",
-
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -25,6 +24,7 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
     "@types/morgan": "^1.9.3",
+    "@types/mssql": "^8.1.1",
     "@types/node": "^18.11.8",
     "compression": "^1.7.4",
     "dotenv": "^16.0.3",
