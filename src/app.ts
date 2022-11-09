@@ -57,11 +57,20 @@ class App {
     };
 
     private apiMiddleware(req: Request, res: Response, next: NextFunction){
-        next();
+        const tk: string | undefined = req.headers.authorization? req.headers.authorization.replace("Bearer ",""): undefined;
+        if(tk){
+            req.body = {
+                ...req.body,
+                key: tk
+            };
+            next();
+        }else{
+            res.sendStatus(403);
+        };
     };
 
     private mainMiddleware(req: Request, res: Response, next: NextFunction){
-        res.sendStatus(403);
+        next();
     };
 
 };

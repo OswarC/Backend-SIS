@@ -12,7 +12,7 @@ class SqlDriver{
         this.request = new sql.Request();
     };
 
-    public execute(inputs: SqlInput[], procedure: string) : Promise<any>{
+    public execute(procedure: string, inputs: SqlInput[] = []) : Promise<any>{
         return new Promise<any>((resolve, reject) => {
             for(let input of inputs){
                 this.request.input(input.name, input.value);

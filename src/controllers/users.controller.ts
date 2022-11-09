@@ -11,7 +11,12 @@ class UserController{
     private routes(){
         this.app.route("/login").get(this.UserService.login);
         this.app.route("/redirect").get(this.UserService.redirect);
-        this.app.route("/api/verify").get(this.UserService.ValidateToken);
+
+        this.app.route("/api/users").get(this.UserService.getUsers);
+        this.app.route("/api/users/:skip").get(this.UserService.getUsers);
+        this.app.route("/api/users/:skip/:search").get(this.UserService.getUsers);
+
+        this.app.route("/api/verify/users").get(this.UserService.ValidateToken);
     };
 };
 
