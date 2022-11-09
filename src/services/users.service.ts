@@ -6,6 +6,10 @@ import moment from "moment";
 import { encodeToken } from "../helpers/jwt.helper";
 import { verifyToken } from "../helpers/token.helper";
 
+import { resolve } from "path";
+import { config } from "dotenv";
+
+config({ path: resolve(__dirname, "../.env") });
 
 class UserService {
 
@@ -29,7 +33,7 @@ class UserService {
 
         pca.acquireTokenByCode(tokenRequest).then(async (response: any) => {
             const account: any = response.account;
-            const dn: string[] = account.username.split("edu");
+            const dn: string[] = account.username.split("unah.edu.hn");
 
             const ud: IUser = {
                 name: account.name,
@@ -47,16 +51,33 @@ class UserService {
                 { name: "utype_id", value: ud.utype_id },
             ]);
 
-            const tk = {
-                startDate: moment(),
-                endDate: moment().add(4, "hours"),
-                user: ud.email
-            };
+            const usert = await sql.execute("GetUsers", [
+                { name: "skip", value: 0 },
+                { name: "search", value: ud.email },
+            ]);
 
-            const etk = encodeToken(tk);
+            if (usert.recordset[0]) {
+                const tk = {
+                    startDate: moment().toDate(),
+                    endDate: moment().add(4, "hours").toDate(),
+                    user: usert.recordset[0].user_id
+                };
 
-            res.cookie("tk", etk);
-            res.redirect(`http://localhost:3001/login/${etk}`);
+                const tksaved = await sql.execute("InsertToken", [
+                    { name: "startDate", value: tk.startDate },
+                    { name: "endDate", value: tk.endDate },
+                    { name: "user", value: tk.user },
+                ]);
+
+                if(tksaved.recordset[0]){
+                    const etk = encodeToken(tksaved.recordset[0]);
+                    res.cookie("tk", etk);
+                    res.redirect(`${process.env.FRONT_QUERY!}/logaz/${etk}`);
+                }else{
+                    res.redirect(`${process.env.FRONT_QUERY!}/login_error`);
+                };
+            }
+
 
         }).catch((error: any) => {
             console.log(error);
@@ -73,8 +94,8 @@ class UserService {
     public async getUsers(req: Request, res: Response) {
         try {
             const sql: SqlDriver = new SqlDriver();
-            const skip = req.params.skip? req.params.skip: 0;
-            const search = req.params.search? req.params.search: "";
+            const skip = req.params.skip ? req.params.skip : 0;
+            const search = req.params.search ? req.params.search : "";
 
             const t = await sql.execute("GetUsers", [
                 { name: "skip", value: skip },
@@ -83,7 +104,7 @@ class UserService {
 
             const countUsers = await sql.execute("CountUsers");
 
-            res.status(200).json({successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });  
+            res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });
         } catch (error) {
             res.sendStatus(500);
         }

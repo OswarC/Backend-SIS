@@ -7,7 +7,9 @@ CREATE PROCEDURE InsertUser
 	@utype_id int
 AS   
 BEGIN
-    INSERT INTO tbUsers([name], create_at, email, utype_id) VALUES(@name, @create_at, @email, @utype_id)
+	IF (SELECT COUNT(email) AS email FROM tbUsers WHERE email = @email) = 0 
+		INSERT INTO tbUsers([name], create_at, email, utype_id) VALUES(@name, @create_at, @email, @utype_id);
+	SELECT * FROM tbUsers WHERE email = @email
 END
 GO
 
@@ -27,5 +29,17 @@ CREATE PROCEDURE CountUsers
 AS
 BEGIN
 	SELECT COUNT([user_id]) as UserCount FROM tbUsers;
+END
+GO
+
+CREATE PROCEDURE InsertToken
+@startDate datetime,
+@endDate datetime,
+@user int
+AS
+BEGIN
+	UPDATE tbTokens SET active = 0 WHERE [user_id] = @user;
+	INSERT INTO tbTokens(startDate, endDate, [user_id]) values(@startDate, @endDate, @user);
+	SELECT * FROM tbTokens WHERE startDate = @startDate and endDate = @endDate and [user_id] = @user;
 END
 GO
