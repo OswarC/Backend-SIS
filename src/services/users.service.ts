@@ -72,7 +72,7 @@ class UserService {
                 if(tksaved.recordset[0]){
                     const etk = encodeToken(tksaved.recordset[0]);
                     res.cookie("tk", etk);
-                    res.redirect(`${process.env.FRONT_QUERY!}/logaz/${etk.replace(".", "_?")}`);
+                    res.redirect(`${process.env.FRONT_QUERY!}/logaz/${etk.replace(".", "_$")}`);
                 }else{
                     res.redirect(`${process.env.FRONT_QUERY!}/login_error`);
                 };
