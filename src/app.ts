@@ -22,8 +22,6 @@ class App {
         this.setSqlConfig();
         
         this.UsCont = new UserController(this.app);
-        this.app.all("/api/", this.apiMiddleware);
-        this.app.all("/", this.mainMiddleware);
     };
 
     private setConfig() {
@@ -33,6 +31,9 @@ class App {
         this.app.use(cors());  
         this.app.use(express.json({ limit: "50mb" }));
         this.app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+        this.app.all("/api/*", this.apiMiddleware);
+
     };
 
     private setSqlConfig(){
@@ -69,9 +70,6 @@ class App {
         };
     };
 
-    private mainMiddleware(req: Request, res: Response, next: NextFunction){
-        next();
-    };
 
 };
 

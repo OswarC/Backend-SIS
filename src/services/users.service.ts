@@ -113,17 +113,15 @@ class UserService {
 
     public async getMyUser(req: Request, res: Response) {
         try {
+            console.log(req.body)
             const key: IToken = await decodeToken(req.body.key);
             const sql: SqlDriver = new SqlDriver();
 
-            //const t = await sql.execute("GetUsers", [
-            //    { name: "skip", value: 0 },
-            //    { name: "search", value: search },
-            //]);
+            const t = await sql.execute("GetMyUser", [
+                { name: "id", value: key.user_id },
+            ]);
 
-            //const countUsers = await sql.execute("CountUsers");
-//
-            //res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });
+            res.status(200).json({ successed: (t.recordset.length === 1), user: t.recordset[0] });
         } catch (error) {
             res.sendStatus(500);
         }
