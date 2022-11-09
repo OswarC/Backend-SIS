@@ -40,8 +40,7 @@ class UserService {
 
             const sql: SqlDriver = new SqlDriver();
 
-
-            const t = await sql.execute("InsertUser", [
+            await sql.execute("InsertUser", [
                 { name: "name", value: ud.name },
                 { name: "email", value: ud.email },
                 { name: "create_at", value: new Date() },
