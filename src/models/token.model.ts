@@ -1,5 +1,5 @@
 export interface IToken{
     startDate: Date,
     endDate: Date,
-    user: any
+    user_id: any
 };

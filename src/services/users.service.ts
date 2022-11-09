@@ -3,11 +3,12 @@ import pca, { REDIRECT_URI } from "../config";
 import SqlDriver from "../helpers/sql.helper";
 import { IUser } from "../models/users.model";
 import moment from "moment";
-import { encodeToken } from "../helpers/jwt.helper";
+import { decodeToken, encodeToken } from "../helpers/jwt.helper";
 import { verifyToken } from "../helpers/token.helper";
 
 import { resolve } from "path";
 import { config } from "dotenv";
+import { IToken } from "../models/token.model";
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -57,22 +58,22 @@ class UserService {
             ]);
 
             if (usert.recordset[0]) {
-                const tk = {
+                const tk: IToken = {
                     startDate: moment().toDate(),
                     endDate: moment().add(4, "hours").toDate(),
-                    user: usert.recordset[0].user_id
+                    user_id: usert.recordset[0].user_id
                 };
 
                 const tksaved = await sql.execute("InsertToken", [
                     { name: "startDate", value: tk.startDate },
                     { name: "endDate", value: tk.endDate },
-                    { name: "user", value: tk.user },
+                    { name: "user", value: tk.user_id },
                 ]);
 
                 if(tksaved.recordset[0]){
                     const etk = encodeToken(tksaved.recordset[0]);
                     res.cookie("tk", etk);
-                    res.redirect(`${process.env.FRONT_QUERY!}/logaz/${etk.replace(".", "_$")}`);
+                    res.redirect(`${process.env.FRONT_QUERY!}/logaz/${etk.split(".").join("_$")}`);
                 }else{
                     res.redirect(`${process.env.FRONT_QUERY!}/login_error`);
                 };
@@ -105,6 +106,24 @@ class UserService {
             const countUsers = await sql.execute("CountUsers");
 
             res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    };
+
+    public async getMyUser(req: Request, res: Response) {
+        try {
+            const key: IToken = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+
+            //const t = await sql.execute("GetUsers", [
+            //    { name: "skip", value: 0 },
+            //    { name: "search", value: search },
+            //]);
+
+            //const countUsers = await sql.execute("CountUsers");
+//
+            //res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });
         } catch (error) {
             res.sendStatus(500);
         }
