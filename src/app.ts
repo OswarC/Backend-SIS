@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
@@ -7,6 +7,7 @@ import sql from "mssql";
 
 import { resolve } from "path";
 import { config } from "dotenv";
+
 import UserController from "./controllers/users.controller";
 
 config({ path: resolve(__dirname, "../.env") });
@@ -21,6 +22,8 @@ class App {
         this.setSqlConfig();
         
         this.UsCont = new UserController(this.app);
+        this.app.all("/api/", this.apiMiddleware);
+        this.app.all("/", this.mainMiddleware);
     };
 
     private setConfig() {
@@ -33,7 +36,6 @@ class App {
     };
 
     private setSqlConfig(){
-        
         const config: sql.config = {
             database: process.env.DB!,
             user: process.env.DB_USER!,
@@ -52,6 +54,14 @@ class App {
                 console.log("Conexion con Sql");
             };
         });
+    };
+
+    private apiMiddleware(req: Request, res: Response, next: NextFunction){
+        next();
+    };
+
+    private mainMiddleware(req: Request, res: Response, next: NextFunction){
+        res.sendStatus(403);
     };
 
 };

@@ -1,5 +1,5 @@
-class TokenModel{
-
+export interface IToken{
+    startDate: Date,
+    endDate: Date,
+    user: any
 };
-
-export default TokenModel;

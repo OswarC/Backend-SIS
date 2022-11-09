@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import pca, { REDIRECT_URI } from "../config";
 import SqlDriver from "../helpers/sql.helper";
 import { IUser } from "../models/users.model";
+import moment from "moment";
+import { encodeToken } from "../helpers/jwt.helper";
+import { verifyToken } from "../helpers/token.helper";
 
 class UserService{
 
@@ -23,7 +26,7 @@ class UserService{
             redirectUri: REDIRECT_URI,
         };
     
-        pca.acquireTokenByCode(tokenRequest).then((response:any) => {
+        pca.acquireTokenByCode(tokenRequest).then(async (response:any) => {
             const account:any = response.account;
             const dn:string[] = account.username.split("edu");
             
@@ -36,21 +39,39 @@ class UserService{
 
             const sql: SqlDriver = new SqlDriver();
 
-            sql.input("name", ud.name);
-            sql.input("email", ud.email);
-            sql.input("create_at", new Date());
-            sql.input("utype_id", ud.utype_id);
+            const t  = await sql.execute([
+                {name:"name", value: ud.name},
+                {name:"email", value: ud.email},
+                {name:"create_at", value: new Date()},
+                {name:"utype_id", value: ud.utype_id},
+            ], "InsertUser");
 
-            sql.execute("InsertUser")
+            const tk = {
+                startDate: moment(),
+                endDate: moment().add(4, "hours"),
+                user: ud.email
+            };
 
-            res.cookie("tk","dasdwqrwgerr trew");
-            res.redirect("http://localhost:3001");
+            const etk = encodeToken(tk);
+
+            res.cookie("tk", etk);
+            res.redirect(`http://localhost:3001/login/${etk}`);
 
         }).catch((error:any) => {
             console.log(error);
             res.status(500).send(error);
         });
-    }
+    };
+
+    public ValidateToken(req: Request, res:Response){
+        const tk: string | undefined = req.headers.authorization? req.headers.authorization.replace("Bearer ",""): undefined;
+        if(tk){
+             verifyToken(tk).then(val=>{
+                res.status(200).json({successed: val})
+             });
+        };
+    };
+
 };
 
 export default UserService;

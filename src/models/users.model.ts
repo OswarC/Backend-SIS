@@ -5,17 +5,3 @@ export interface IUser{
     create_at: Date,
     utype_id?: number
 }
-
-class UserModel{
-    public insert(){
-
-    };
-    public update(){
-
-    };
-    public get(){
-
-    }
-};
-
-export default UserModel;
