@@ -43,3 +43,14 @@ BEGIN
 	SELECT * FROM tbTokens WHERE startDate = @startDate and endDate = @endDate and [user_id] = @user;
 END
 GO
+
+use [lms-bd]
+GO
+CREATE PROCEDURE GetMyUser
+@id int
+AS
+BEGIN
+SELECT [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
+INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id WHERE u.[user_id] = @id
+END
+GO
