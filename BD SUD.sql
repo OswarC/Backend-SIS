@@ -32,9 +32,9 @@ create table tbCourses(
 create table tbSection(
 	[section_id] int identity(1,1) primary key,
 	create_at datetime NOT NULL,
-	[name] varchar(100) NOT NULL,
+	[name] varchar(100) DEFAULT 'TEST' NOT NULL,
 	[state] binary default 1,
-	[user_id] int foreign key([user_id]) references tbUsers([user_id]) NOT NULL,
+	[course_id] int foreign key(course_id) references tbCourses(course_id) NOT NULL
 )
 
 create table tbSectionsMembers(
@@ -45,9 +45,11 @@ create table tbSectionsMembers(
 
 create table tbUnits(
 	unit_id int identity(1,1) primary key,
-	title varchar(50) NOT NULL,
+	title varchar(50) DEFAULT VALUE 'GENERAL' NOT NULL,
 	create_at datetime NOT NULL,
-	[section_id] int foreign key([section_id]) references tbSection([section_id]) NOT NULL
+	[section_id] int foreign key([section_id]) references tbSection([section_id]) NOT NULL,
+	
+	CONSTRAINT UC_title_section UNIQUE (title, section_id),
 );
 
 create table tbAssignmentsType(

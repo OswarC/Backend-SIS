@@ -1,4 +1,44 @@
 //Documentacion de endpoints
+
+//Course
+//Insert metodo post
+//ruta /api/courses
+const formato = {
+    body:{
+        data: {
+            title: "",
+            description: ""
+        }
+    }
+}
+//Respuesta
+const Respuesta = {
+    data: {
+        successed: true | false,
+        course: {
+            course_id: 0,
+            title:"",
+            description: "",
+            create_at: Date,
+            user_id: 0
+        }
+    }
+}
+
+//Section
+//Insert metodo post
+//ruta /api/sections
+const Sectionformato = {
+    body:{
+        data: {
+            name: "",
+        }
+    }
+}
+
+
+
+
 const insertUser = {
     route: "/login",
     details: "Inicio de sesion",

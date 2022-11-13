@@ -3,11 +3,11 @@ import pca, { REDIRECT_URI } from "../config";
 import SqlDriver from "../helpers/sql.helper";
 import { IUser } from "../models/users.model";
 import moment from "moment";
-import { decodeToken, encodeToken } from "../helpers/jwt.helper";
 import { verifyToken } from "../helpers/token.helper";
 
 import { resolve } from "path";
 import { config } from "dotenv";
+import { decodeToken, encodeToken } from "../helpers/jwt.helper";
 import { IToken } from "../models/token.model";
 
 config({ path: resolve(__dirname, "../.env") });
@@ -95,8 +95,8 @@ class UserService {
     public async getUsers(req: Request, res: Response) {
         try {
             const sql: SqlDriver = new SqlDriver();
-            const skip = req.params.skip ? req.params.skip : 0;
-            const search = req.params.search ? req.params.search : "";
+            const skip = req.query.skip ? req.query.skip : 0;
+            const search = req.query.search ? req.query.search : "";
 
             const t = await sql.execute("GetUsers", [
                 { name: "skip", value: skip },
@@ -113,7 +113,6 @@ class UserService {
 
     public async getMyUser(req: Request, res: Response) {
         try {
-            console.log(req.body)
             const key: IToken = await decodeToken(req.body.key);
             const sql: SqlDriver = new SqlDriver();
 
