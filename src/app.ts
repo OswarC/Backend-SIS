@@ -9,12 +9,14 @@ import { resolve } from "path";
 import { config } from "dotenv";
 
 import UserController from "./controllers/users.controller";
+import CourseController from "./controllers/courses.controller";
 
 config({ path: resolve(__dirname, "../.env") });
 
 class App {
     public app: Application;
     public UsCont: UserController;
+    public CourseCont: CourseController;
 
     constructor() {
         this.app = express();
@@ -22,6 +24,7 @@ class App {
         this.setSqlConfig();
         
         this.UsCont = new UserController(this.app);
+        this.CourseCont = new CourseController(this.app);
     };
 
     private setConfig() {
