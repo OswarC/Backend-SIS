@@ -15,9 +15,12 @@ class CourseController {
             .get(this.courseServ.getCourses);
 
         this.app.route("/api/sections")
-            .post(this.courseServ.InsertSection);
+            .post(this.courseServ.InsertSection)
+            .get(this.courseServ.getSections);
 
-        this.app.route("/api/sections").get(this.courseServ.getSections);
+        this.app.route("/api/sections/members")
+            .post(this.courseServ.addMemberToSection)
+            .get(this.courseServ.getSectionsMembers);
     };
 };
 

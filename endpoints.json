@@ -375,6 +375,83 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Insertar un usuario a una seccion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"user\": 1,\r\n        \"section\": 3\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/sections/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"sections",
+						"members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Miembros de una Seccion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/sections/members?section=1&skip=0&search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"sections",
+						"members"
+					],
+					"query": [
+						{
+							"key": "section",
+							"value": "1"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "search",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

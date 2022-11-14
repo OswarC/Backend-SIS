@@ -18,10 +18,12 @@ CREATE PROCEDURE GetUsers
 @search varchar(100)
 AS
 BEGIN
-	SELECT * FROM (
-	SELECT TOP 10 [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
-	INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id WHERE u.[name] LIKE '%'+@search+'%' OR email LIKE '%'+@search+'%'
-	) as f ORDER BY f.[name] OFFSET @skip ROWS
+	SELECT TOP 10 * FROM (
+		SELECT [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
+		INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id 
+		WHERE u.[name] LIKE '%'+@search+'%' OR email LIKE '%'+@search+'%'
+		ORDER BY u.[name] OFFSET @skip ROWS
+	) as f 
 END
 GO
 
@@ -46,12 +48,13 @@ GO
 
 use [lms-bd]
 GO
+
 CREATE PROCEDURE GetMyUser
 @id int
 AS
 BEGIN
-SELECT [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
-INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id WHERE u.[user_id] = @id
+	SELECT [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
+	INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id WHERE u.[user_id] = @id
 END
 GO
 
@@ -91,16 +94,20 @@ BEGIN
 END
 GO
 
+
 CREATE PROCEDURE getCourses
 @skip int,
 @search varchar(100)
 AS
 BEGIN
-	SELECT * FROM (
-		SELECT TOP 10 * FROM tbCourses WHERE active = 1 AND title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
-	) AS c ORDER BY c.create_at DESC OFFSET @skip ROWS
+	SELECT TOP 10 * FROM (
+		SELECT * FROM tbCourses 
+		WHERE active = 1 AND title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
+		ORDER BY create_at DESC OFFSET @skip ROWS
+	) AS c 
 END
 GO
+
 
 CREATE PROCEDURE getSections
 @skip int,
@@ -108,11 +115,12 @@ CREATE PROCEDURE getSections
 @user_id int
 AS
 BEGIN
-	SELECT * FROM (
-		SELECT TOP 10 s.* FROM tbSectionsMembers as sm
+	SELECT TOP 10 * FROM (
+		SELECT s.* FROM tbSectionsMembers as sm
 		INNER JOIN tbSection AS s ON s.section_id = sm.section_id 
 		WHERE sm.[user_id] = @user_id AND s.[name] LIKE '%'+@search+'%'
-	) AS c ORDER BY c.create_at DESC OFFSET @skip ROWS
+		ORDER BY s.create_at DESC OFFSET @skip ROWS
+	) AS c 
 END
 GO
 
@@ -124,25 +132,16 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE InsertSectionMember
-	@user_id as int,
-	@section_id as int
-AS
-BEGIN
-	INSERT INTO tbSectionsMembers([user_id], section_id) VALUES(@user_id, @section_id)
-END
-GO
-
 CREATE PROCEDURE getSectionsByCourse
 @skip int,
 @search varchar(100),
 @course int
 AS
 BEGIN
-	SELECT * FROM (
-		SELECT TOP 10 * FROM tbSection as sm
-		WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%'
-	) AS c ORDER BY c.create_at DESC OFFSET @skip ROWS
+	SELECT TOP 10 * FROM (
+		SELECT * FROM tbSection as sm
+		WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%' ORDER BY create_at DESC OFFSET @skip ROWS
+	) AS c 
 END
 
 CREATE PROCEDURE updateUserType
@@ -161,3 +160,96 @@ BEGIN
 SELECT * FROM tbUsersType
 END
 GO
+
+CREATE PROCEDURE InsertSectionMember
+@user_id int,
+@section_id as int
+AS
+BEGIN
+	INSERT INTO tbSectionsMembers([user_id], section_id) VALUES(@user_id, @section_id)
+	SELECT * FROM tbSectionsMembers WHERE [user_id] = @user_id AND section_id = @section_id
+END
+GO
+
+CREATE PROCEDURE GetMemberBySection
+@section_id int,
+@skip int,
+@search varchar(100)
+AS
+BEGIN
+	SELECT TOP 10 * FROM (
+		SELECT u.*, ut.[name] as [type] FROM tbSectionsMembers as sm
+		INNER JOIN tbUsers as u on u.[user_id] = sm.[user_id]
+		INNER JOIN tbUsersType as ut on ut.utype_id = u.utype_id
+		WHERE sm.section_id = @section_id ORDER BY u.create_at DESC OFFSET @skip ROWS
+	) AS c  
+END
+GO
+
+
+
+/* Alter Procedures */
+
+ALTER PROCEDURE GetUsers
+@skip int,
+@search varchar(100)
+AS
+BEGIN
+	SELECT TOP 10 * FROM (
+		SELECT [user_id], u.[name], [email], create_at, u.utype_id, ut.[name] as [type] FROM tbUsers as u
+		INNER JOIN tbUsersType as ut ON ut.utype_id = u.utype_id 
+		WHERE u.[name] LIKE '%'+@search+'%' OR email LIKE '%'+@search+'%'
+		ORDER BY u.[name] OFFSET @skip ROWS
+	) as f 
+	SELECT COUNT([user_id]) as [count] FROM tbUsers as u WHERE u.[name] LIKE '%'+@search+'%' OR email LIKE '%'+@search+'%'
+END
+GO
+
+ALTER PROCEDURE getCourses
+@skip int,
+@search varchar(100)
+AS
+BEGIN
+	SELECT TOP 10 * FROM (
+		SELECT * FROM tbCourses 
+		WHERE active = 1 AND title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
+		ORDER BY create_at DESC OFFSET @skip ROWS
+	) AS c 
+	SELECT COUNT(course_id) as [count] FROM tbCourses WHERE active = 1 AND title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
+END
+GO
+
+ALTER PROCEDURE getSections
+@skip int,
+@search varchar(100),
+@user_id int
+AS
+BEGIN
+	SELECT TOP 10 * FROM (
+		SELECT s.* FROM tbSectionsMembers as sm
+		INNER JOIN tbSection AS s ON s.section_id = sm.section_id 
+		WHERE sm.[user_id] = @user_id AND s.[name] LIKE '%'+@search+'%'
+		ORDER BY s.create_at DESC OFFSET @skip ROWS
+	) AS c 
+	SELECT count(s.section_id) as [count] FROM tbSectionsMembers as sm 
+	INNER JOIN tbSection AS s ON s.section_id = sm.section_id 
+	WHERE sm.[user_id] = @user_id AND s.[name] LIKE '%'+@search+'%'
+END
+GO
+
+ALTER PROCEDURE getSectionsByCourse
+@skip int,
+@search varchar(100),
+@course int
+AS
+BEGIN
+	SELECT TOP 10 * FROM (
+		SELECT * FROM tbSection as sm
+		WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%' 
+		ORDER BY sm.create_at DESC OFFSET @skip ROWS
+	) AS c 
+	SELECT COUNT(sm.section_id) as [count] FROM tbSection as  sm
+	WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%'
+END
+
+/* FINAL DEL ALTER */

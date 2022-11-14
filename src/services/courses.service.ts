@@ -107,6 +107,49 @@ class CourseService {
         }
     };
 
+    public async addMemberToSection(req: Request, res: Response) {
+        try {
+            const body = req.body.data;
+            const sql: SqlDriver = new SqlDriver();
+            const key: IToken = await decodeToken(req.body.key);
+
+            const t = await sql.execute("InsertSectionMember", [
+                { name: "user_id", value: body.user },
+                { name: "section_id", value: body.section },
+            ]);
+
+            res.status(200).json({ successed: true });
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    };
+
+    public async getSectionsMembers(req: Request, res: Response) {
+        try {
+            const sql: SqlDriver = new SqlDriver();
+            const section = req.query.section ? req.query.section : undefined;
+            const skip = req.query.skip ? req.query.skip : 0;
+            const search = req.query.search ? req.query.search : "";
+            const key: IToken = await decodeToken(req.body.key);
+
+            if(section){
+                const t = await sql.execute("GetMemberBySection", [
+                    { name: "skip", value: skip },
+                    { name: "search", value: search },
+                    { name: "section_id", value: section },
+                ]);
+
+                res.status(200).json({ successed: true, members: t.recordset });
+            }else{
+                res.status(200).json({ successed: false, sections: [] });
+            };
+  
+        } catch (error:any) {
+            console.log(error.message)
+            res.sendStatus(500);
+        }
+    };
+
 };
 
 export default CourseService;

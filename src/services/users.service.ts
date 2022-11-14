@@ -103,9 +103,7 @@ class UserService {
                 { name: "search", value: search },
             ]);
 
-            const countUsers = await sql.execute("CountUsers");
-
-            res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: countUsers.recordset[0].UserCount });
+            res.status(200).json({ successed: (t.recordset.length > 0), users: t.recordset, count: t.recordsets[1][0].count });
         } catch (error) {
             res.sendStatus(500);
         }
