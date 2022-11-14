@@ -54,7 +54,7 @@ class CourseService {
                 { name: "search", value: search },
             ]);
 
-            res.status(200).json({ successed: (t.recordset.length > 0), courses: t.recordset });
+            res.status(200).json({ successed: (t.recordset.length > 0), courses: t.recordset, count: t.recordsets[1][0].count });
         } catch (error) {
             res.sendStatus(500);
         }
@@ -99,7 +99,7 @@ class CourseService {
                 { name: course? "course": "user_id", value: course? course: key.user_id },
             ]);
 
-            res.status(200).json({ successed: (t.recordset.length > 0), sections: t.recordset });
+            res.status(200).json({ successed: (t.recordset.length > 0), sections: t.recordset, count: t.recordsets[1][0].count });
             
         } catch (error:any) {
             console.log(error.message)
@@ -139,7 +139,7 @@ class CourseService {
                     { name: "section_id", value: section },
                 ]);
 
-                res.status(200).json({ successed: true, members: t.recordset });
+                res.status(200).json({ successed: true, members: t.recordset, count: t.recordsets[1][0].count });
             }else{
                 res.status(200).json({ successed: false, sections: [] });
             };
