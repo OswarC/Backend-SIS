@@ -17,8 +17,7 @@ class CourseController {
         this.app.route("/api/sections")
             .post(this.courseServ.InsertSection);
 
-        this.app.route("/api/sections_course").get(this.courseServ.getSectionsByCourse);
-        this.app.route("/api/sections").get(this.courseServ.getSectionsByCourse);
+        this.app.route("/api/sections").get(this.courseServ.getSections);
     };
 };
 

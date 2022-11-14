@@ -5,6 +5,10 @@ create table tbUsersType(
 	[name] varchar(50) unique NOT NULL,
 );
 
+insert into tbUsersType([name]) values("ESTUDIANTE");
+insert into tbUsersType([name]) values("PROFESOR");
+insert into tbUsersType([name]) values("ADMINISTRADOR");
+
 create table tbUsers(
 	[user_id] int identity(1,1) primary key,
 	[name] varchar(250) NOT NULL,
@@ -17,15 +21,16 @@ create table tbTokens(
 	token_id int identity(1,1) primary key,
 	startDate datetime,
 	endDate datetime,
-	active binary DEFAULT 1,
+	active bit DEFAULT 1,
 	[user_id] int foreign key([user_id]) references tbUsers([user_id]) NOT NULL,
 );
 
 create table tbCourses(
 	[course_id] int identity(1,1) primary key,
-	title varchar(100) NOT NULL,
-	[description] varchar(250) default 'NO HAY REGISTRO',
+	title varchar(100) UNIQUE NOT NULL,
+	[description] varchar(250) DEFAULT 'NO HAY REGISTRO',
 	create_at datetime NOT NULL,
+	active bit DEFAULT 1,
 	[user_id] int foreign key([user_id]) references tbUsers([user_id]) NOT NULL,
 );
 
@@ -33,8 +38,10 @@ create table tbSection(
 	[section_id] int identity(1,1) primary key,
 	create_at datetime NOT NULL,
 	[name] varchar(100) DEFAULT 'TEST' NOT NULL,
-	[state] binary default 1,
-	[course_id] int foreign key(course_id) references tbCourses(course_id) NOT NULL
+	[state] bit DEFAULT 1,
+	[course_id] int foreign key(course_id) references tbCourses(course_id) NOT NULL,
+
+	CONSTRAINT UC_name_section UNIQUE ([name], [course_id]),
 )
 
 create table tbSectionsMembers(
@@ -57,6 +64,8 @@ create table tbAssignmentsType(
 	[name] varchar(50) unique NOT NULL,
 );
 
+insert into tbAssignmentsType([name]) values("TAREAS");
+
 create table tbAssignments(
 	assignments_id int identity(1,1) primary key,
 	title varchar(100) NOT NULL,
@@ -65,8 +74,9 @@ create table tbAssignments(
 	startDate datetime NOT NULL,
 	endDate datetime NOT NULL,
 	[value] int DEFAULT 100,
-	[state] binary default 1,
-	visible binary default 0,
+	[state] bit DEFAULT 1,
+	visible bit DEFAULT 0,
+
 	unit_id int foreign key(unit_id) references tbUnits(unit_id) NOT NULL,
 	assignments_type_id int foreign key(assignments_type_id) references tbAssignmentsType(assignments_type_id) NOT NULL,
 );
@@ -75,7 +85,7 @@ create table tbHomeworkSubmissions(
 	homework_submission_id int identity(1,1) primary key,
 	create_at datetime NOT NULL,
 	comments varchar(250) NOT NULL,
-	qualification int default 0,
+	qualification int DEFAULT 0,
 	section_id int,
 	[user_id] int,
 	assignments_id int foreign key(assignments_id) references tbAssignments(assignments_id) NOT NULL,

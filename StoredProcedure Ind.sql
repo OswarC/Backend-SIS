@@ -70,10 +70,11 @@ GO
 
 CREATE PROCEDURE InsertSection
 	@name varchar(100),
-	@create_at datetime
+	@create_at datetime,
+	@course_id int
 AS
 BEGIN
-	INSERT INTO tbSection([name], create_at) values(@name, @create_at)
+	INSERT INTO tbSection([name], create_at, course_id) values(@name, @create_at, @course_id)
 		INSERT INTO tbUnits(create_at, section_id) SELECT create_at, section_id FROM tbSection WHERE [name] = @name and create_at = @create_at
 	SELECT * FROM tbSection WHERE [name] = @name and create_at = @create_at
 END
@@ -96,7 +97,7 @@ CREATE PROCEDURE getCourses
 AS
 BEGIN
 	SELECT * FROM (
-		SELECT TOP 10 * FROM tbCourses WHERE title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
+		SELECT TOP 10 * FROM tbCourses WHERE active = 1 AND title LIKE '%'+@search+'%' OR description like '%'+@search+'%'
 	) AS c ORDER BY c.create_at DESC OFFSET @skip ROWS
 END
 GO
@@ -129,5 +130,34 @@ CREATE PROCEDURE InsertSectionMember
 AS
 BEGIN
 	INSERT INTO tbSectionsMembers([user_id], section_id) VALUES(@user_id, @section_id)
+END
+GO
+
+CREATE PROCEDURE getSectionsByCourse
+@skip int,
+@search varchar(100),
+@course int
+AS
+BEGIN
+	SELECT * FROM (
+		SELECT TOP 10 * FROM tbSection as sm
+		WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%'
+	) AS c ORDER BY c.create_at DESC OFFSET @skip ROWS
+END
+
+CREATE PROCEDURE updateUserType
+@user_id int,
+@type int
+AS
+BEGIN
+UPDATE tbUsers SET utype_id = @type WHERE [user_id] = @user_id
+SELECT * FROM tbUsers WHERE [user_id] = @user_id
+END
+GO
+
+CREATE PROCEDURE getUserTypes
+AS
+BEGIN
+SELECT * FROM tbUsersType
 END
 GO

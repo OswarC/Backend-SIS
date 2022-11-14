@@ -5,7 +5,7 @@ export const verifyToken = (tk: string): Promise<boolean>  => {
     return new Promise<boolean>(async(resolve, reject) => {
         try {
             const dtk: IToken = await decodeToken(tk);
-            resolve((dtk.endDate.getTime() > new Date().getTime() ))
+            resolve((new Date(dtk.endDate).getTime() > new Date().getTime() ))
         } catch (error) {
             reject(error);
         };

@@ -124,7 +124,37 @@ class UserService {
         } catch (error) {
             res.sendStatus(500);
         }
-    }
+    };
+
+    public async getUserTypes(req: Request, res: Response) {
+        try {
+            const key: IToken = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+
+            const t = await sql.execute("getUserTypes");
+
+            res.status(200).json({ successed: true, user: t.recordset });
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    };
+
+    public async updateUserTypes(req: Request, res: Response) {
+        try {
+            const body = req.body.data;
+            const key: IToken = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+
+            const t = await sql.execute("updateUserType",[
+                {name:"user_id", value: body.user},
+                {name:"type", value: body.type}
+            ]);
+
+            res.status(200).json({ successed: t.recordset[0]? true: false, user: t.recordset[0]? t.recordset[0]: {} });
+        } catch (error) {
+            res.sendStatus(500);
+        }
+    };
 
 };
 
