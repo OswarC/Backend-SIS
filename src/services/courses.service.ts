@@ -93,15 +93,15 @@ class CourseService {
             const search = req.query.search ? req.query.search : "";
             const key: IToken = await decodeToken(req.body.key);
 
-            const t = await sql.execute(course? "getSectionsByCourse": "getSections", [
+            const t = await sql.execute(course ? "getSectionsByCourse" : "getSections", [
                 { name: "skip", value: skip },
                 { name: "search", value: search },
-                { name: course? "course": "user_id", value: course? course: key.user_id },
+                { name: course ? "course" : "user_id", value: course ? course : key.user_id },
             ]);
 
             res.status(200).json({ successed: (t.recordset.length > 0), sections: t.recordset, count: t.recordsets[1][0].count });
-            
-        } catch (error:any) {
+
+        } catch (error: any) {
             console.log(error.message)
             res.sendStatus(500);
         }
@@ -132,23 +132,96 @@ class CourseService {
             const search = req.query.search ? req.query.search : "";
             const key: IToken = await decodeToken(req.body.key);
 
-            if(section){
+            if (section) {
                 const t = await sql.execute("GetMemberBySection", [
                     { name: "skip", value: skip },
                     { name: "search", value: search },
                     { name: "section_id", value: section },
                 ]);
 
+                console.log(t.recordsets)
+
+
                 res.status(200).json({ successed: true, members: t.recordset, count: t.recordsets[1][0].count });
-            }else{
+            } else {
                 res.status(200).json({ successed: false, sections: [] });
             };
-  
-        } catch (error:any) {
+
+        } catch (error: any) {
             console.log(error.message)
             res.sendStatus(500);
         }
     };
+
+    public async updateCourse(req: Request, res: Response) {
+        try {
+            const body: any = req.body.data;
+            const key = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+
+            const t = await sql.execute("updateCourse", [
+                { name: "title", value: body.title },
+                { name: "description", value: body.description },
+                { name: "course_id", value: body.course_id },
+            ]);
+
+            res.status(200).json({ successed: true, course: t.recordset[0] ? t.recordset[0] : {} })
+        } catch (error: any) {
+            console.log(error.message)
+            res.sendStatus(500);
+        }
+    }
+
+    public async changeCourseState(req: Request, res: Response) {
+        try {
+            const body: any = req.body.data;
+            const key = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+
+            const t = await sql.execute("changeCourseState", [
+                { name: "state", value: body.state },
+                { name: "course_id", value: body.course_id },
+            ]);
+
+            res.status(200).json({ successed: true, course: t.recordset[0] ? t.recordset[0] : {} })
+
+        } catch (error: any) {
+            console.log(error.message)
+            res.sendStatus(500);
+        }
+    }
+
+    public async updateSection(req: Request, res: Response) {
+        try {
+            const body: any = req.body.data;
+            const key = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+            const t = await sql.execute("updateSection", [
+                { name: "name", value: body.name },
+                { name: "section_id", value: body.section_id },
+            ]);
+            res.status(200).json({ successed: true, section: t.recordset[0] ? t.recordset[0] : {} })
+        } catch (error: any) {
+            console.log(error.message)
+            res.sendStatus(500);
+        }
+    }
+
+    public async changeSectionState(req: Request, res: Response) {
+        try {
+            const body: any = req.body.data;
+            const key = await decodeToken(req.body.key);
+            const sql: SqlDriver = new SqlDriver();
+            const t = await sql.execute("changeSectionState", [
+                { name: "state", value: body.state },
+                { name: "section_id", value: body.section_id },
+            ]);
+            res.status(200).json({ successed: true, section: t.recordset[0] ? t.recordset[0] : {} })
+        } catch (error: any) {
+            console.log(error.message)
+            res.sendStatus(500);
+        }
+    }
 
 };
 

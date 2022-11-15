@@ -182,7 +182,51 @@ BEGIN
 		INNER JOIN tbUsers as u on u.[user_id] = sm.[user_id]
 		INNER JOIN tbUsersType as ut on ut.utype_id = u.utype_id
 		WHERE sm.section_id = @section_id ORDER BY u.create_at DESC OFFSET @skip ROWS
-	) AS c  
+	) AS c
+	SELECT count(section_id) as [count] FROM tbSection WHERE section_id = @section_id   
+END
+GO
+
+
+CREATE PROCEDURE updateCourse
+@title varchar(100),
+@description varchar(250),
+@course_id int
+AS
+BEGIN
+	UPDATE tbCourses SET title = @title, [description] = @description WHERE course_id = @course_id
+	SELECT * FROM tbCourses WHERE course_id = @course_id
+END
+GO
+
+CREATE PROCEDURE changeCourseState
+@course_id int,
+@state bit
+AS
+BEGIN
+	UPDATE tbCourses SET active = @state WHERE course_id = @course_id
+	SELECT * FROM tbCourses WHERE course_id = @course_id
+END
+GO
+
+CREATE PROCEDURE updateSection
+@name varchar(100),
+@section_id int
+AS
+BEGIN
+	UPDATE tbSection SET [name] = @name WHERE section_id = @section_id
+	SELECT * FROM tbSection WHERE section_id = @section_id
+END
+GO
+
+
+CREATE PROCEDURE changeSectionState
+@state bit,
+@section_id int
+AS
+BEGIN
+	UPDATE tbSection SET [state] = @state WHERE section_id = @section_id
+	SELECT * FROM tbSection WHERE section_id = @section_id
 END
 GO
 
