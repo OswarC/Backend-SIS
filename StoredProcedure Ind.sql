@@ -230,6 +230,114 @@ BEGIN
 END
 GO
 
+/* PROCEDIMIENTOS AUN NO PROBADOS */
+/*
+
+
+
+
+*/
+
+CREATE PROCEDURE getUnitsBySection
+	@section_id int
+AS
+BEGIN
+	SELECT * FROM tbUnits WHERE section_id = @section_id;
+END
+GO
+
+
+CREATE PROCEDURE InsertMedia
+	@title varchar(250),
+	@description varchar(500),
+	@create_at datetime,
+	@file varchar(max)
+AS
+BEGIN
+	INSERT INTO tbMedia(title, [description], create_at, [file]) VALUES(@title, @description, @create_at, @file)
+	SELECT * FROM tbMedia WHERE title = @title and [description] = @description and  create_at = @create_at 		
+END
+GO
+
+CREATE PROCEDURE InsertContent
+	@media_id int,
+	@unit_id int
+AS
+BEGIN
+	INSERT INTO tbContent(media_id, unit_id) VALUES(@media_id, @unit_id)
+	SELECT * FROM tbContent as c
+	INNER JOIN tbMedia as m on m.media_id = c.media_id
+	WHERE c.media_id = @media_id and c.unit_id = @unit_id
+END
+GO
+
+CREATE PROCEDURE InsertHomeworkFile
+	@media_id int,
+	@hs_id int
+AS
+BEGIN
+	INSERT INTO tbHomeWorksFiles(media_id, homework_submission_id) VALUES(@media_id, @hs_id)
+	SELECT * FROM tbHomeWorksFiles as hs
+	INNER JOIN tbMedia as m on m.media_id = hs.media_id
+	WHERE hs.homework_submission_id = @hs_id AND m.media_id = @media_id
+END
+GO
+
+CREATE PROCEDURE InsertHomeworkSub
+	@assignment int,
+	@user int,
+	@section int,
+	@create_at datetime
+AS
+BEGIN
+	INSERT INTO tbHomeworkSubmissions([assignments_id], [user_id], section_id, create_at) VALUES (@assignment, @user, @section, @create_at)
+	SELECT * FROM tbHomeworkSubmissions WHERE assignments_id = @assignment and [user_id] = @user and section_id = @section
+END
+GO
+
+CREATE PROCEDURE InsertHomework
+	@title varchar(100),
+	@description varchar(500),
+	@create_at datetime,
+	@startDate datetime,
+	@endDate datetime,
+	@value int,
+	@visible bit,
+	@unit int
+AS
+BEGIN
+	INSERT INTO tbAssignments(title, [description], create_at, startDate, endDate, [value], visible, unit_id, assignments_type_id)
+	VALUES(@title, @description, @create_at, @startDate, @endDate, @value, @visible, @unit, 1)
+END
+GO
+
+CREATE PROCEDURE getAssignByUnit
+	@unit int
+AS
+BEGIN
+	SELECT * FROM tbAssignments WHERE unit_id = @unit 
+END
+GO
+
+CREATE PROCEDURE getHomeworks
+	@assign int
+AS 
+BEGIN
+	SELECT * FROM tbAssignments  as a WHERE a.assignments_id = @assign 
+	SELECT * FROM tbHomeworkSubmissions where assignments_id = @assign
+END
+GO
+
+CREATE PROCEDURE getMediaByHS
+	@homework int
+AS
+BEGIN
+	SELECT * FROM tbHomeWorksFiles as hf
+	INNER JOIN tbMedia as m ON m.media_id = hf.media_id
+	WHERE hf.homework_submission_id = @homework
+END
+GO
+
 
 
 /* Alter Procedures */
