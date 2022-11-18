@@ -234,43 +234,6 @@ GO
 /*
 
 
-
-
-*/
-
-CREATE PROCEDURE getUnitsBySection
-	@section_id int
-AS
-BEGIN
-	SELECT * FROM tbUnits WHERE section_id = @section_id;
-END
-GO
-
-
-CREATE PROCEDURE InsertMedia
-	@title varchar(250),
-	@description varchar(500),
-	@create_at datetime,
-	@file varchar(max)
-AS
-BEGIN
-	INSERT INTO tbMedia(title, [description], create_at, [file]) VALUES(@title, @description, @create_at, @file)
-	SELECT * FROM tbMedia WHERE title = @title and [description] = @description and  create_at = @create_at 		
-END
-GO
-
-CREATE PROCEDURE InsertContent
-	@media_id int,
-	@unit_id int
-AS
-BEGIN
-	INSERT INTO tbContent(media_id, unit_id) VALUES(@media_id, @unit_id)
-	SELECT * FROM tbContent as c
-	INNER JOIN tbMedia as m on m.media_id = c.media_id
-	WHERE c.media_id = @media_id and c.unit_id = @unit_id
-END
-GO
-
 CREATE PROCEDURE InsertHomeworkFile
 	@media_id int,
 	@hs_id int
@@ -337,6 +300,54 @@ BEGIN
 	WHERE hf.homework_submission_id = @homework
 END
 GO
+
+
+*/
+
+
+CREATE PROCEDURE getUnitsBySection
+	@section_id int
+AS
+BEGIN
+	SELECT * FROM tbUnits WHERE section_id = @section_id;
+END
+GO
+
+
+CREATE PROCEDURE InsertMedia
+	@title varchar(250),
+	@description varchar(500),
+	@create_at datetime,
+	@file varchar(max)
+AS
+BEGIN
+	INSERT INTO tbMedia(title, [description], create_at, [file]) VALUES(@title, @description, @create_at, @file)
+	SELECT * FROM tbMedia WHERE title = @title and [description] = @description and  create_at = @create_at 		
+END
+GO
+
+CREATE PROCEDURE InsertContent
+	@media_id int,
+	@unit_id int
+AS
+BEGIN
+	INSERT INTO tbContent(media_id, unit_id) VALUES(@media_id, @unit_id)
+	SELECT * FROM tbContent as c
+	INNER JOIN tbMedia as m on m.media_id = c.media_id
+	WHERE c.media_id = @media_id and c.unit_id = @unit_id
+END
+GO
+
+CREATE PROCEDURE getContent
+	@unit_id int
+AS
+BEGIN
+	SELECT * FROM tbContent as c 
+	INNER JOIN tbMedia as m ON m.media_id = c.media_id
+	WHERE c.unit_id = @unit_id
+END
+GO
+
 
 
 
