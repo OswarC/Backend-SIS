@@ -86,7 +86,7 @@ GO
 CREATE PROCEDURE InsertUnit
 	@title varchar(50),
 	@create_at datetime,
-	@section_id int
+	@section_id int,
 AS
 BEGIN
 	INSERT INTO tbUnits(title, create_at, section_id) VALUES(@title, @create_at, @section_id)
