@@ -5,17 +5,17 @@ create table tbUsersType(
 	[name] varchar(50) unique NOT NULL,
 );
 
-insert into tbUsersType([name]) values("ESTUDIANTE");
-insert into tbUsersType([name]) values("PROFESOR");
-insert into tbUsersType([name]) values("ADMINISTRADOR");
-
 create table tbUsers(
 	[user_id] int identity(1,1) primary key,
 	[name] varchar(250) NOT NULL,
 	email varchar(100) unique NOT NULL,
 	create_at datetime NOT NULL,
-	utype_id int foreign key(utype_id) references tbUsersType(utype_id) NOT NULL
+	utype_id int foreign key(utype_id) references tbUsersType(utype_id) NOT NULL,
 );
+
+ALTER TABLE tbUsers
+ADD CONSTRAINT auser DEFAULT GETDATE() FOR create_at
+GO
 
 create table tbTokens(
 	token_id int identity(1,1) primary key,
@@ -52,7 +52,7 @@ create table tbSectionsMembers(
 
 create table tbUnits(
 	unit_id int identity(1,1) primary key,
-	title varchar(50) DEFAULT VALUE 'GENERAL' NOT NULL,
+	title varchar(50) DEFAULT 'GENERAL' NOT NULL,
 	create_at datetime NOT NULL,
 	[section_id] int foreign key([section_id]) references tbSection([section_id]) NOT NULL,
 	
@@ -64,7 +64,7 @@ create table tbAssignmentsType(
 	[name] varchar(50) unique NOT NULL,
 );
 
-insert into tbAssignmentsType([name]) values("TAREAS");
+insert into tbAssignmentsType([name]) values('TAREAS');
 
 create table tbAssignments(
 	assignments_id int identity(1,1) primary key,
@@ -73,9 +73,9 @@ create table tbAssignments(
 	create_at datetime NOT NULL,
 	startDate datetime NOT NULL,
 	endDate datetime NOT NULL,
-	[value] int DEFAULT 100,
-	[state] bit DEFAULT 1,
-	visible bit DEFAULT 0,
+	[value] int DEFAULT 100 NOT NULL,
+	[state] bit DEFAULT 1 NOT NULL,
+	visible bit DEFAULT 0 NOT NULL,
 
 	unit_id int foreign key(unit_id) references tbUnits(unit_id) NOT NULL,
 	assignments_type_id int foreign key(assignments_type_id) references tbAssignmentsType(assignments_type_id) NOT NULL,

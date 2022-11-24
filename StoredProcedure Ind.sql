@@ -143,6 +143,7 @@ BEGIN
 		WHERE sm.course_id = @course AND sm.[name] LIKE '%'+@search+'%' ORDER BY create_at DESC OFFSET @skip ROWS
 	) AS c 
 END
+GO
 
 CREATE PROCEDURE updateUserType
 @user_id int,
