@@ -452,6 +452,174 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Obtener todas las unidades por seccion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/units?section=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"units"
+					],
+					"query": [
+						{
+							"key": "section",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insertar Contenido a una unidad",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\":{\r\n        \"title\":\"Prueba\",\r\n        \"description\":\"Esta es una prueba\",\r\n        \"file\":\"contenido.\",\r\n        \"unit\": 3\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/units",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"units"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Contenido por unidades",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/content?unit=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"content"
+					],
+					"query": [
+						{
+							"key": "unit",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

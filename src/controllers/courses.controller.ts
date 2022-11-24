@@ -21,9 +21,6 @@ class CourseController {
             .get(this.courseServ.getSections)
             .put(this.courseServ.updateSection);
 
-        this.app.route("/api/section")
-            .put(this.courseServ.updateSection);
-
         this.app.route("/api/sections/members")
             .post(this.courseServ.addMemberToSection)
             .get(this.courseServ.getSectionsMembers);

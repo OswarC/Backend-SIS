@@ -39,7 +39,7 @@ class UnitService {
                 const r = await sql.execute("InsertContent", [
                 { name: "media_id", value: t.recordset[0].media_id },
                 { name: "unit_id", value: body.unit },
-                ]);
+            ]);
 
 
                 res.status(200).json({ successed: true, media: r.recordset });
@@ -58,11 +58,11 @@ class UnitService {
             const unit = req.query.unit;
             const key: IToken = await decodeToken(req.body.key);
 
-            const t = await sql.execute("getUnitsBySection", [
+            const t = await sql.execute("getContent", [
                 { name: "unit_id", value: unit },
             ]);
 
-            res.status(200).json({ successed: true, sections: t.recordset });
+            res.status(200).json({ successed: true, content: t.recordset });
         } catch (error: any) {
             console.log(error.message);
             res.sendStatus(403)
