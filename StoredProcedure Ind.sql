@@ -231,9 +231,23 @@ BEGIN
 END
 GO
 
-/* PROCEDIMIENTOS AUN NO PROBADOS */
-/*
+/*Procedimientos finales */
 
+CREATE PROCEDURE InsertHomework
+	@title varchar(100),
+	@description varchar(500),
+	@create_at datetime,
+	@startDate datetime,
+	@endDate datetime,
+	@value int,
+	@visible bit,
+	@unit int
+AS
+BEGIN
+	INSERT INTO tbAssignments(title, [description], create_at, startDate, endDate, [value], visible, unit_id, assignments_type_id)
+	VALUES(@title, @description, @create_at, @startDate, @endDate, @value, @visible, @unit, 1)
+END
+GO
 
 CREATE PROCEDURE InsertHomeworkFile
 	@media_id int,
@@ -259,22 +273,6 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE InsertHomework
-	@title varchar(100),
-	@description varchar(500),
-	@create_at datetime,
-	@startDate datetime,
-	@endDate datetime,
-	@value int,
-	@visible bit,
-	@unit int
-AS
-BEGIN
-	INSERT INTO tbAssignments(title, [description], create_at, startDate, endDate, [value], visible, unit_id, assignments_type_id)
-	VALUES(@title, @description, @create_at, @startDate, @endDate, @value, @visible, @unit, 1)
-END
-GO
-
 CREATE PROCEDURE getAssignByUnit
 	@unit int
 AS
@@ -283,12 +281,17 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE getHomeworks
-	@assign int
+ALTER PROCEDURE getHomeworks
+	@assign int,
+	@section int = NULL,
+	@user int = NULL
 AS 
 BEGIN
 	SELECT * FROM tbAssignments  as a WHERE a.assignments_id = @assign 
-	SELECT * FROM tbHomeworkSubmissions where assignments_id = @assign
+	IF(@section IS NULL OR @user IS NULL)
+		SELECT * FROM tbHomeworkSubmissions where assignments_id = @assign
+	ELSE
+		SELECT * FROM tbHomeworkSubmissions where assignments_id = @assign AND section_id = @section AND [user_id] = @user
 END
 GO
 
@@ -302,6 +305,9 @@ BEGIN
 END
 GO
 
+
+/* PROCEDIMIENTOS AUN NO PROBADOS */
+/*
 
 */
 
@@ -348,8 +354,6 @@ BEGIN
 	WHERE c.unit_id = @unit_id
 END
 GO
-
-
 
 
 /* Alter Procedures */
