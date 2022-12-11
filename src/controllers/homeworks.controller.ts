@@ -15,7 +15,6 @@ class HomeworkController{
             .post(this.home_serv.insertNewHomework);
 
         this.app.route("/api/homeworks")
-            .post(this.home_serv.getHomeworksByUnit)
             .get(this.home_serv.getHomeworksByUnit);
 
         this.app.route("/api/v2/homeworks")

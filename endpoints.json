@@ -383,7 +383,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"data\":{\r\n        \"user\": 1,\r\n        \"section\": 3\r\n    }\r\n}",
+					"raw": "{\r\n    \"data\":{\r\n        \"user\": 12,\r\n        \"section\": 1\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -615,6 +615,217 @@
 						{
 							"key": "unit",
 							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insertar Homework",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": {\r\n        \"title\":\"Prueba de Homework\",\r\n        \"description\":\"Esta es una prueba\",\r\n        \"startDate\": \"12-11-2022\",\r\n        \"endDate\":\"12-15-2022\",\r\n        \"unit\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/homework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"homework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insertar Homework Submission",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": {\r\n        \"assignment\": 1,\r\n        \"section\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/homeworks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"homeworks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insertar Homework Submission",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": {\r\n        \"assignment\": 2,\r\n        \"section\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/homeworks/submission",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"homeworks",
+						"submission"
+					]
+				},
+				"description": "Es necesario que el usuario loggeado sea miembro de la seccion"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Homeworks Por unidad",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl9pZCI6Miwic3RhcnREYXRlIjoiMjAyMi0xMS0xNFQwNDo0ODo0Ny4yNzBaIiwiZW5kRGF0ZSI6IjIwMjItMTEtMTRUMDg6NDg6NDcuMjcwWiIsImFjdGl2ZSI6dHJ1ZSwidXNlcl9pZCI6MX0.s2ZRzTwHLb903U6hqGTuRh1LIG73iKNGWFT0RZu7a8Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-rapidapi-host",
+						"value": "v3.football.api-sports.io",
+						"type": "text"
+					},
+					{
+						"key": "x-rapidapi-key",
+						"value": "37fd153ba78772b40ef429159eea7c44",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3005/api/homeworks?unit=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"homeworks"
+					],
+					"query": [
+						{
+							"key": "unit",
+							"value": "1"
 						}
 					]
 				}

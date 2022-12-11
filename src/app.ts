@@ -11,6 +11,7 @@ import { config } from "dotenv";
 import UserController from "./controllers/users.controller";
 import CourseController from "./controllers/courses.controller";
 import UnitController from "./controllers/units.controller";
+import HomeworkController from "./controllers/homeworks.controller";
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -19,6 +20,7 @@ class App {
     public UsCont: UserController;
     public CourseCont: CourseController;
     public unCont: UnitController;
+    public hmCont: HomeworkController;
 
     constructor() {
         this.app = express();
@@ -28,6 +30,7 @@ class App {
         this.UsCont = new UserController(this.app);
         this.CourseCont = new CourseController(this.app);
         this.unCont = new UnitController(this.app);
+        this.hmCont = new HomeworkController(this.app);
     };
 
     private setConfig() {

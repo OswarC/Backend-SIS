@@ -17,8 +17,8 @@ class HomeworkService {
                 { name: "create_at", value: new Date() },
                 { name: "startDate", value: body.startDate },
                 { name: "endDate", value: body.endDate },
-                { name: "value", value: body.value },
-                { name: "visible", value: body.visible },
+                { name: "value", value: body.value? body.value: 100 },
+                { name: "visible", value: true },
                 { name: "unit", value: body.unit },
             ]);
 
@@ -126,7 +126,7 @@ class HomeworkService {
     public async getHomeworksByUnit(req: Request, res: Response) {
         try {
             const sql: SqlDriver = new SqlDriver();
-            const body = req.body.data;
+            const body = req.query;
             const key: IToken = await decodeToken(req.body.key);
 
             const t = await sql.execute("getAssignByUnit", [
@@ -134,7 +134,7 @@ class HomeworkService {
             ]);
 
             console.log(t)
-            res.status(200).json({successed: true})
+            res.status(200).json({successed: true, homeworks: t.recordset})
 
         } catch (error: any) {
             console.log(error.message);
