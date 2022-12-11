@@ -37,13 +37,13 @@ class UnitService {
 
             if (t.recordset && t.recordset.length === 1) {
                 const r = await sql.execute("InsertContent", [
-                { name: "media_id", value: t.recordset[0].media_id },
-                { name: "unit_id", value: body.unit },
-            ]);
+                    { name: "media_id", value: t.recordset[0].media_id },
+                    { name: "unit_id", value: body.unit },
+                ]);
 
 
                 res.status(200).json({ successed: true, media: r.recordset });
-            }else{
+            } else {
                 res.status(200).json({ successed: false });
             };
         } catch (error: any) {
