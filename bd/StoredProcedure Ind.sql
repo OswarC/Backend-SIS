@@ -255,7 +255,7 @@ CREATE PROCEDURE InsertHomeworkFile
 AS
 BEGIN
 	INSERT INTO tbHomeWorksFiles(media_id, homework_submission_id) VALUES(@media_id, @hs_id)
-	SELECT * FROM tbHomeWorksFiles as hs
+	SELECT hs.media_id, hs.homework_submission_id, m.[file], m.title, m.[description], m.create_at FROM tbHomeWorksFiles as hs
 	INNER JOIN tbMedia as m on m.media_id = hs.media_id
 	WHERE hs.homework_submission_id = @hs_id AND m.media_id = @media_id
 END

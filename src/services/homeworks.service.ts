@@ -45,11 +45,11 @@ class HomeworkService {
             ]);
 
             console.log(t)
-            res.status(200).json({successed: true})
+            res.status(200).json({successed: true, submission:t.recordset})
 
         } catch (error: any) {
             console.log(error.message);
-            res.sendStatus(403)
+            res.status(403).json({successed: false, message: error.message})
         };
     };
 
@@ -105,7 +105,7 @@ class HomeworkService {
     public async getHomeworkSubsByUser(req: Request, res: Response) {
         try {
             const sql: SqlDriver = new SqlDriver();
-            const body = req.body.data;
+            const body = req.query;
             const key: IToken = await decodeToken(req.body.key);
 
             const t = await sql.execute("getHomeworks", [
@@ -114,8 +114,7 @@ class HomeworkService {
                 { name: "section", value: body.section },
             ]);
 
-            console.log(t)
-            res.status(200).json({successed: true})
+            res.status(200).json({successed: true, homework_subs: t.recordset })
 
         } catch (error: any) {
             console.log(error.message);
@@ -145,19 +144,18 @@ class HomeworkService {
     public async getHomeworksWithSubmissions(req:Request, res:Response){
         try {
             const sql: SqlDriver = new SqlDriver();
-            const body = req.body.data;
+            const body = req.query;
             const key: IToken = await decodeToken(req.body.key);
 
             const t = await sql.execute("getHomeworks", [
                 { name: "assign", value: body.assign },
             ]);
 
-            console.log(t)
-            res.status(200).json({successed: true})
+            res.status(200).json({successed: true, homework: t.recordset[0]? t.recordset[0]: {}, submissions: t.recordsets[1]})
             
         } catch (error: any) {
             console.log(error.message);
-            res.sendStatus(403)
+            res.status(403).json({successed:false, message: error.message})
         }
     };
 
